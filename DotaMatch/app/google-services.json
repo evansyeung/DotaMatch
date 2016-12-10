@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "151552986932",
+    "firebase_url": "https://dotamatch-27d80.firebaseio.com",
+    "project_id": "dotamatch-27d80",
+    "storage_bucket": "dotamatch-27d80.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:151552986932:android:5257b5abe184ae95",
+        "android_client_info": {
+          "package_name": "com.dotamatch.designproject.dotamatch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "151552986932-nmg1al6q96ibqpkqr8102gsbujd4aked.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dotamatch.designproject.dotamatch",
+            "certificate_hash": "0E5EA935D57C712E634CB18F1840CCF8DFAD2C6C"
+          }
+        },
+        {
+          "client_id": "151552986932-qmirq4ps55e0uv5o5rs57dclc69v68b1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8wiODfkAyW4q1wDXCdUTp22jwevGJyhs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "151552986932-qmirq4ps55e0uv5o5rs57dclc69v68b1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
