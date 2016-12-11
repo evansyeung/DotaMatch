@@ -19,7 +19,9 @@
         </activity>
         <activity android:name=".LoginActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".PreferenceActivity"></activity>
+        <activity android:name=".PreferenceActivity" />
+        <activity android:name=".ChatRoomActivity" />
+        <activity android:name=".MessageActivity"></activity>
     </application>
 
 </manifest>

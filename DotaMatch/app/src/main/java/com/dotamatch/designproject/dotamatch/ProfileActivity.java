@@ -58,8 +58,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         if(view == buttonMessage) {
-            //finish();
-            //startActivity(new Intent(this, PreferenceActivity.class));
+            finish();
+            startActivity(new Intent(this, ChatRoomActivity.class));
         }
 
         if(view == buttonPreference) {

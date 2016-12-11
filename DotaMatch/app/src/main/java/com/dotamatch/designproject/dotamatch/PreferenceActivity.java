@@ -28,7 +28,6 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
     private RatingBar ratingBarRating;
 
     private Button buttonSave;
-    private Button buttonBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +47,10 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
         ratingBarRating = (RatingBar) findViewById(R.id.ratingBarRating);
 
         buttonSave = (Button) findViewById(R.id.buttonSave);
-        buttonBack = (Button) findViewById(R.id.buttonBack);
 
         ratingBarRating.setOnClickListener(this);
 
         buttonSave.setOnClickListener(this);
-        buttonBack.setOnClickListener(this);
     }
 
     private void saveUserInformation() {
@@ -79,10 +76,11 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
         if(view == buttonSave) {
             saveUserInformation();
         }
+    }
 
-        if(view == buttonBack) {
-            finish();
-            startActivity(new Intent(this, ProfileActivity.class));
-        }
+    @Override
+    public void onBackPressed() {
+        finish();
+        startActivity(new Intent(this, ProfileActivity.class));
     }
 }
