@@ -24,21 +24,39 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Large Text"
             android:id="@+id/textViewUserEmail"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Play"
+            android:id="@+id/buttonPlay"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/colorPrimary" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Message"
+            android:id="@+id/buttonMessage"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/colorPrimary" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Preference"
             android:id="@+id/buttonPreference"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/colorPrimary" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Log Out"
             android:id="@+id/buttonLogOut"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/colorPrimary" />
 
     </LinearLayout>
 </RelativeLayout>

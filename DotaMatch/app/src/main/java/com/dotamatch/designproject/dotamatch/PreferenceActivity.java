@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,7 +21,9 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
 
     private FirebaseAuth firebaseAuth;
 
-    private TextView editTextDotaName;
+    private EditText editTextDotaName;
+    private EditText editTextMMR;
+    private EditText editTextRole;
 
     private RatingBar ratingBarRating;
 
@@ -41,6 +42,8 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
         firebaseAuth = FirebaseAuth.getInstance();
 
         editTextDotaName = (EditText) findViewById(R.id.editTextDotaName);
+        editTextMMR = (EditText) findViewById(R.id.editTextMMR);
+        editTextRole = (EditText) findViewById(R.id.editTextRole);
 
         ratingBarRating = (RatingBar) findViewById(R.id.ratingBarRating);
 
@@ -55,9 +58,12 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
 
     private void saveUserInformation() {
         String DotaName = editTextDotaName.getText().toString().trim();
+        String mmrTemp = editTextMMR.getText().toString().trim();
+        int mmr = Integer.valueOf(mmrTemp);
+        String role = editTextRole.getText().toString().trim();
         float rating = ratingBarRating.getRating();
 
-        User userInformation = new User(DotaName, rating);
+        User userInformation = new User(DotaName, mmr, role, rating);
 
         //To store user into Firebase Database
         //Get unique id of log in user

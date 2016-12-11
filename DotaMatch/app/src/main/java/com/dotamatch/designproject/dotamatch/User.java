@@ -7,14 +7,18 @@ package com.dotamatch.designproject.dotamatch;
 public class User {
 
     public String DotaName;
+    public int MMR;
+    public String role;
     public float rating;
 
     public User() {
 
     }
 
-    public User(String dotaName, float rating) {
+    public User(String dotaName, int MMR, String role, float rating) {
         this.DotaName = dotaName;
+        this.MMR = MMR;
+        this.role = role;
         this.rating = rating;
     }
 }

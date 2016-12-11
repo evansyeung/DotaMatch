@@ -18,18 +18,41 @@
         android:layout_centerHorizontal="true"
         android:weightSum="1">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Preferences"
+            android:id="@+id/textViewPreference"
+            android:layout_gravity="center_horizontal"/>
+
         <EditText
             android:id="@+id/editTextDotaName"
             android:hint="Enter your Dota Name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"/>
+
+        <EditText
+        android:id="@+id/editTextMMR"
+        android:hint="Enter your MMR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"/>
+
+        <EditText
+            android:id="@+id/editTextRole"
+            android:hint="Enter your Role"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Rating"
-            android:id="@+id/textViewUserEmail"
+            android:id="@+id/textViewRating"
             android:layout_gravity="center_horizontal"/>
 
         <RatingBar
@@ -39,17 +62,19 @@
             android:layout_gravity="center_horizontal"/>
 
         <Button
-        android:id="@+id/buttonSave"
-        android:text="Save Information"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+            android:id="@+id/buttonSave"
+            android:text="Save Information"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimary" />
 
         <Button
             android:id="@+id/buttonBack"
             android:text="Back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/colorPrimary" />
 
     </LinearLayout>
 

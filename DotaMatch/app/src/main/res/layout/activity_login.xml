@@ -8,6 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/startUp"
     tools:context="com.dotamatch.designproject.dotamatch.LoginActivity">
 
     <LinearLayout
@@ -23,7 +24,8 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="User Login"
             android:id="@+id/textView"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/text" />
 
         <EditText
             android:layout_margin="15dp"
@@ -31,7 +33,8 @@
             android:hint="Enter your email"
             android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/text" />
 
         <EditText
             android:layout_margin="15dp"
@@ -39,20 +42,24 @@
             android:hint="Enter your password"
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/text" />
 
         <Button
             android:id="@+id/buttonEnter"
             android:text=" Enter"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/text" />
 
         <TextView
             android:textAlignment="center"
             android:text="Not Registered? Sign up here"
             android:id="@+id/textViewSignUp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/text" />
 
     </LinearLayout>
 

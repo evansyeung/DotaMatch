@@ -16,6 +16,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private TextView textViewUserEmail;
 
+    private Button buttonPlay;
+    private Button buttonMessage;
     private Button buttonPreference;
     private Button buttonLogOut;
 
@@ -37,15 +39,29 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         textViewUserEmail.setText("Welcome " + user.getEmail());
 
+        buttonPlay = (Button) findViewById(R.id.buttonPlay);
+        buttonMessage = (Button) findViewById(R.id.buttonMessage);
         buttonPreference = (Button) findViewById(R.id.buttonPreference);
         buttonLogOut = (Button) findViewById(R.id.buttonLogOut);
 
+        buttonPlay.setOnClickListener(this);
+        buttonMessage.setOnClickListener(this);
         buttonPreference.setOnClickListener(this);
         buttonLogOut.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
+        if(view == buttonPlay) {
+            //finish();
+            //startActivity(new Intent(this, PreferenceActivity.class));
+        }
+
+        if(view == buttonMessage) {
+            //finish();
+            //startActivity(new Intent(this, PreferenceActivity.class));
+        }
+
         if(view == buttonPreference) {
             finish();
             startActivity(new Intent(this, PreferenceActivity.class));
