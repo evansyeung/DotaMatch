@@ -45,7 +45,7 @@ public class MessageActivity extends AppCompatActivity {
 
         room_name = getIntent().getExtras().get("room_name").toString();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child(room_name);
+        databaseReference = FirebaseDatabase.getInstance().getReference("Chat Rooms").child(room_name);
 
         setTitle(room_name);
 

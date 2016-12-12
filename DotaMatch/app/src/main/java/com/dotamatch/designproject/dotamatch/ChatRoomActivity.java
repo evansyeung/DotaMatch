@@ -36,7 +36,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     private ArrayList<String> listOfRooms = new ArrayList<>();
 
-    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().getRoot();
+    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Chat Rooms");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

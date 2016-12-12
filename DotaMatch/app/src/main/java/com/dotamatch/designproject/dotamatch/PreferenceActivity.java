@@ -35,7 +35,7 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_preference);
 
         //Initialize firebase database object
-        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference = FirebaseDatabase.getInstance().getReference("User");
 
         //Initialize firebase authentication object
         firebaseAuth = FirebaseAuth.getInstance();
