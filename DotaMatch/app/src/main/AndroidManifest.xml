@@ -21,7 +21,8 @@
         <activity android:name=".ProfileActivity" />
         <activity android:name=".PreferenceActivity" />
         <activity android:name=".ChatRoomActivity" />
-        <activity android:name=".MessageActivity"></activity>
+        <activity android:name=".MessageActivity" />
+        <activity android:name=".PartyActivity"></activity>
     </application>
 
 </manifest>

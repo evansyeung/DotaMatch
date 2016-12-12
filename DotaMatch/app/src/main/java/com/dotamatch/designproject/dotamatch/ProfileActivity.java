@@ -53,8 +53,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         if(view == buttonPlay) {
-            //finish();
-            //startActivity(new Intent(this, PreferenceActivity.class));
+            finish();
+            startActivity(new Intent(this, PartyActivity.class));
         }
 
         if(view == buttonMessage) {
