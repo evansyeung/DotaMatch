@@ -58,8 +58,8 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                FirebaseUser user1 = firebaseAuth.getCurrentUser();
-                User user = dataSnapshot.child(user1.getUid()).getValue(User.class);
+                FirebaseUser temp = firebaseAuth.getCurrentUser();
+                User user = dataSnapshot.child(temp.getUid()).getValue(User.class);
                 textViewUser1.setText(user.DotaName);
                 ratingBarUser1.setRating(user.rating);
             }
