@@ -56,7 +56,7 @@ public class MessageActivity extends AppCompatActivity {
         room_name = getIntent().getExtras().get("room_name").toString();
 
         databaseReference = firebaseDatabase.getReference("Chat Rooms").child(room_name);
-        databaseUserReference = firebaseDatabase.getReference("/User");
+        databaseUserReference = firebaseDatabase.getReference("User");
 
         firebaseAuth = FirebaseAuth.getInstance();
 

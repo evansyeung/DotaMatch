@@ -68,7 +68,7 @@
                 android:id="@+id/ratingBarUser1"
                 android:layout_below="@+id/textViewUser1"
                 android:layout_alignParentStart="true"
-                android:isIndicator="false" />
+                android:isIndicator="true" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -264,6 +264,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/textViewUser5Role"
                     android:layout_weight="3" />
+
             </LinearLayout>
 
             <RatingBar
@@ -274,6 +275,26 @@
                 android:layout_below="@+id/textViewUser5"
                 android:layout_alignParentStart="true"
                 android:isIndicator="false" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:text="Rating :"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/numberPickerRating"
+                    android:layout_weight="1" />
+            </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
