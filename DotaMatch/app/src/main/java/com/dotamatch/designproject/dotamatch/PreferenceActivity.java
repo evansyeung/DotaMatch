@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,14 +29,17 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
 
     private EditText editTextDotaName;
     private EditText editTextMMR;
-    private EditText editTextRole;
+
+    private Spinner roleSpinner;
+
+    ArrayAdapter<CharSequence> roleAdapter;
 
     private RatingBar ratingBarRating;
 
     private Button buttonSave;
     private Button buttonUpdate;
 
-    private String[] roles = {"disabler", "initiator", "jungler", "support", "durable", "nuker", "pusher", "escape"};
+    private String role;
 
 
     @Override
@@ -51,7 +57,6 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
 
         editTextDotaName = (EditText) findViewById(R.id.editTextDotaName);
         editTextMMR = (EditText) findViewById(R.id.editTextMMR);
-        editTextRole = (EditText) findViewById(R.id.editTextRole);
 
         ratingBarRating = (RatingBar) findViewById(R.id.ratingBarRating);
 
@@ -62,13 +67,30 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
 
         buttonSave.setOnClickListener(this);
         buttonUpdate.setOnClickListener(this);
+
+        //Role dropdown menu setup
+        roleSpinner = (Spinner) findViewById(R.id.roleSpinner);
+        roleAdapter = ArrayAdapter.createFromResource(this, R.array.role_names, android.R.layout.simple_spinner_item);
+        roleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        roleSpinner.setAdapter(roleAdapter);
+        roleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getBaseContext(), parent.getItemAtPosition(position) + " role is selected", Toast.LENGTH_SHORT).show();
+                role = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void saveUserInformation() {
         String DotaName = editTextDotaName.getText().toString().trim();
         String mmrTemp = editTextMMR.getText().toString().trim();
         int mmr = Integer.valueOf(mmrTemp);
-        String role = editTextRole.getText().toString().trim();
         float rating = ratingBarRating.getRating();
 
         User userInformation = new User(DotaName, mmr, role, rating);
@@ -84,7 +106,6 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
     private void updateUserInformation() {
         String DotaName = editTextDotaName.getText().toString().trim();
         String mmrTemp = editTextMMR.getText().toString().trim();
-        String role = editTextRole.getText().toString().trim();
         //float rating = ratingBarRating.getRating();
 
         boolean changesMade = false;
@@ -110,20 +131,10 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
             }
             else
                 Toast.makeText(this, "Invalid MMR, please re-enter MMR", Toast.LENGTH_SHORT).show();
-        }else if(!bool_Role) {  //Check for valid role
-            boolean match = false;
-            for(int i=0; i < roles.length; i++) {
-                if(role.toLowerCase() == roles[i]) {
-                    match = true;
-                }
-            }
-
-            if(match) {
-                databaseReference.child(currentUser.getUid()).child("role").setValue(role);
-                changesMade = true;
-            }
-            else
-                Toast.makeText(this, "Invalid role, please re-enter role", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            databaseReference.child(currentUser.getUid()).child("role").setValue(role);
+            changesMade = true;
         }
 
        //Update message if changes were made
