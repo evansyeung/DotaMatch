@@ -2,6 +2,7 @@
     <string name="app_name">DotaMatch</string>
     <string name="select_role">Select your Role</string>
     <string-array name="role_names">
+        <item></item>
         <item>Fill</item>
         <item>Mid</item>
         <item>Carry</item>

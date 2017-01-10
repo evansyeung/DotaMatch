@@ -41,7 +41,6 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
 
     private String role;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,8 +75,10 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
         roleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getBaseContext(), parent.getItemAtPosition(position) + " role is selected", Toast.LENGTH_SHORT).show();
                 role = parent.getItemAtPosition(position).toString();
+                if(!role.equals("")) {
+                    Toast.makeText(getBaseContext(), parent.getItemAtPosition(position) + " role is selected", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -111,9 +112,8 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
         boolean changesMade = false;
         boolean bool_DotaName = TextUtils.isEmpty(DotaName);
         boolean bool_mmrTemp = TextUtils.isEmpty(mmrTemp);
-        boolean bool_Role = TextUtils.isEmpty(role);
 
-        if(bool_DotaName && bool_mmrTemp && bool_Role) {   //No changes to attributes were made
+        if(bool_DotaName && bool_mmrTemp && role.equals("")) {   //No changes to attributes were made
             Toast.makeText(this, "No changes were made", Toast.LENGTH_SHORT).show();
             return;
         }else if(!bool_DotaName){
@@ -131,8 +131,7 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
             }
             else
                 Toast.makeText(this, "Invalid MMR, please re-enter MMR", Toast.LENGTH_SHORT).show();
-        }
-        else {
+        }else if(!role.equals("")) {
             databaseReference.child(currentUser.getUid()).child("role").setValue(role);
             changesMade = true;
         }

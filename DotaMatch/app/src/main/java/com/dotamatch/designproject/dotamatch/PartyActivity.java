@@ -58,12 +58,12 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
 
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();;
 
-    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
-    FirebaseUser temp = firebaseAuth.getCurrentUser();
+    private FirebaseUser temp = firebaseAuth.getCurrentUser();
 
-    DatabaseReference databaseReferencePartyLeader = firebaseDatabase.getReference("/User");
-    DatabaseReference databaseReferenceMembers = firebaseDatabase.getReference("/User");
+    private DatabaseReference databaseReferencePartyLeader = firebaseDatabase.getReference("/User");
+    private DatabaseReference databaseReferenceMembers = firebaseDatabase.getReference("/User");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
