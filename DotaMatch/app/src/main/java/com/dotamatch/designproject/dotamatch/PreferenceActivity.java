@@ -15,16 +15,20 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class PreferenceActivity extends AppCompatActivity implements View.OnClickListener{
 
-    //To store data to Firebase database
+    //Reference store data to Firebase database
     private DatabaseReference databaseReference;
 
     private FirebaseAuth firebaseAuth;
 
+    //Gets current user
     private FirebaseUser currentUser;
 
     private EditText editTextDotaName;
@@ -40,6 +44,9 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
     private Button buttonUpdate;
 
     private String role;
+
+    private boolean changesMade;
+    private boolean error;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +93,21 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
 
             }
         });
-    }
 
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.child(currentUser.getUid()).getValue(User.class);
+                ratingBarRating.setRating(user.rating);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+    }
+/*
     private void saveUserInformation() {
         String DotaName = editTextDotaName.getText().toString().trim();
         String mmrTemp = editTextMMR.getText().toString().trim();
@@ -98,10 +118,42 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
 
         //Store user information into Firebase Database
         //Get unique id of login of current user
-
         databaseReference.child(currentUser.getUid()).setValue(userInformation);
 
         Toast.makeText(this, "Information Save...", Toast.LENGTH_LONG).show();
+    }
+*/
+    void updateDotaName(String DotaName) {
+        if(DotaName.length() <= 15) {   //Check if name is within range
+            if(!error) {
+                databaseReference.child(currentUser.getUid()).child("DotaName").setValue(DotaName);
+                changesMade = true;
+            }
+        }
+        else {
+            Toast.makeText(this, "Invalid name, please re-enter", Toast.LENGTH_SHORT).show();
+            error = true;
+        }
+    }
+
+    void updateMMR(Integer mmr) {
+        if(mmr > 0 && mmr < 8000) { //Check for valid MMR
+            if(!error) {
+                databaseReference.child(currentUser.getUid()).child("MMR").setValue(mmr);
+                changesMade = true;
+            }
+        }
+        else {
+            Toast.makeText(this, "Invalid MMR, please re-enter MMR", Toast.LENGTH_SHORT).show();
+            error = true;
+        }
+    }
+
+    void updateRole(String role) {
+        if(!error) {
+            databaseReference.child(currentUser.getUid()).child("role").setValue(role);
+            changesMade = true;
+        }
     }
 
     private void updateUserInformation() {
@@ -109,31 +161,37 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
         String mmrTemp = editTextMMR.getText().toString().trim();
         //float rating = ratingBarRating.getRating();
 
-        boolean changesMade = false;
         boolean bool_DotaName = TextUtils.isEmpty(DotaName);
         boolean bool_mmrTemp = TextUtils.isEmpty(mmrTemp);
+        error = false;
+        changesMade = false;
 
         if(bool_DotaName && bool_mmrTemp && role.equals("")) {   //No changes to attributes were made
             Toast.makeText(this, "No changes were made", Toast.LENGTH_SHORT).show();
             return;
-        }else if(!bool_DotaName){
-            if(DotaName.length() <= 15) {   //Check if name is within range
-                databaseReference.child(currentUser.getUid()).child("DotaName").setValue(DotaName);
-                changesMade = true;
-            }
-            else
-                Toast.makeText(this, "Invalid name, please re-enter", Toast.LENGTH_SHORT).show();
-        }else if(!bool_mmrTemp) {
+        }else if(!bool_DotaName && !bool_mmrTemp && !role.equals("")) { //Changes were made to DotaName, MMR, and Role
             Integer mmr = Integer.valueOf(mmrTemp);
-            if(mmr > 0 && mmr < 8000) { //Check for valid MMR
-                databaseReference.child(currentUser.getUid()).child("MMR").setValue(mmr);
-                changesMade = true;
-            }
-            else
-                Toast.makeText(this, "Invalid MMR, please re-enter MMR", Toast.LENGTH_SHORT).show();
-        }else if(!role.equals("")) {
-            databaseReference.child(currentUser.getUid()).child("role").setValue(role);
-            changesMade = true;
+            updateDotaName(DotaName);
+            updateMMR(mmr);
+            updateRole(role);
+        }else if(!bool_DotaName && !bool_mmrTemp) { //Changes were made to DotaName and MMR
+            Integer mmr = Integer.valueOf(mmrTemp);
+            updateDotaName(DotaName);
+            updateMMR(mmr);
+        }else if(!bool_DotaName && !role.equals("")) {  //Changes were made to DotaName and Role
+            updateDotaName(DotaName);
+            updateRole(role);
+        }else if(!bool_mmrTemp && !role.equals("")) {   //Changes were made to MMR and Role
+            Integer mmr = Integer.valueOf(mmrTemp);
+            updateMMR(mmr);
+            updateRole(role);
+        }else if(!bool_DotaName){   //Change was made to DotaName
+            updateDotaName(DotaName);
+        }else if(!bool_mmrTemp) {   //Change were made to MMR
+            Integer mmr = Integer.valueOf(mmrTemp);
+            updateMMR(mmr);
+        }else if(!role.equals("")) {    //Change was made to Role
+            updateRole(role);
         }
 
        //Update message if changes were made
@@ -144,9 +202,6 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View view) {
-        if(view == buttonSave) {
-            saveUserInformation();
-        }
         if(view == buttonUpdate) {
             updateUserInformation();
         }

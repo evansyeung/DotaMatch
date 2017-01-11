@@ -79,7 +79,8 @@
             android:id="@+id/ratingBarRating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:isIndicator="true"/>
 
         <Button
             android:id="@+id/buttonSave"
