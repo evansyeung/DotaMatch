@@ -17,11 +17,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button buttonRegister;
+
     private EditText editTextEmail;
     private EditText editTextPassword;
+
     private TextView textViewSignIn;
 
     private ProgressDialog progressDialog;
@@ -31,13 +33,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_registration);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
         //Check if user is already logged in
         if(firebaseAuth.getCurrentUser() != null) {
-            //User is already logged int
+            //User is already logged in
             //Directly start profile activity
             finish();
             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
@@ -87,14 +89,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if(task.isSuccessful()) {
                             //user is successfully registered and logged in
                             //start profile activity
-                            Toast.makeText(MainActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegistrationActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
 
                             finish();
-                            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                            startActivity(new Intent(getApplicationContext(), SetupActivity.class));
 
                         } else {
                             //display error message
-                            Toast.makeText(MainActivity.this, "Could not register, Please try again", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegistrationActivity.this, "Could not register, Please try again", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -107,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          }
 
         if(view == textViewSignIn) {
-            //will login activity here
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         }

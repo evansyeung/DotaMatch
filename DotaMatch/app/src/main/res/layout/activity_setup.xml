@@ -1,58 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_preference"
+    android:id="@+id/activity_setup"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.dotamatch.designproject.dotamatch.PreferenceActivity">
+    android:background="@color/startUp"
+    tools:context="com.dotamatch.designproject.dotamatch.SetupActivity">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:weightSum="1">
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Preferences"
-            android:id="@+id/textViewPreference"
-            android:layout_gravity="center_horizontal"/>
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="10dp" />
-
-        <EditText
-            android:id="@+id/editTextDotaName"
-            android:hint="Enter your Dota Name"
+            android:text="Account Setup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:textAlignment="center" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/text" />
 
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="10dp" />
+            android:layout_height="20dp" />
+
+        <TextView
+            android:text="Dota Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
-        android:id="@+id/editTextMMR"
-        android:hint="Enter your MMR"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-            android:textAlignment="center" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:background="@color/text"
+            android:ems="10"
+            android:id="@+id/editTextDotaName" />
 
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="15dp" />
+            android:layout_height="20dp" />
+
+        <TextView
+            android:text="Matchmaking Rating (MMR)"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:background="@color/text"
+            android:ems="10"
+            android:id="@+id/editTextMMR"  />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="20dp" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -75,47 +87,22 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_toRightOf="@+id/textViewRole"
+                android:backgroundTint="@color/text"
+                android:popupBackground="@color/text"
                 ></Spinner>
 
         </LinearLayout>
 
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="10dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Rating"
-            android:id="@+id/textViewRating"
-            android:layout_gravity="center_horizontal"/>
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="5dp" />
-
-        <RatingBar
-            android:id="@+id/ratingBarRating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:isIndicator="true"/>
+            android:layout_height="20dp" />
 
         <Button
-            android:id="@+id/buttonSave"
-            android:text="Save"
+            android:id="@+id/buttonSubmit"
+            android:text="Submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/text"
             android:backgroundTint="@color/colorPrimary" />
-
-        <Button
-            android:id="@+id/buttonUpdate"
-            android:text="Update"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/colorPrimary" />
-
     </LinearLayout>
-
 </RelativeLayout>

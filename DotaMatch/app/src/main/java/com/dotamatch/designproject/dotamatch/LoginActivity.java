@@ -103,13 +103,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if(view == textViewSignUp) {
             finish();
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, RegistrationActivity.class));
         }
     }
 
     @Override
     public void onBackPressed() {
         finish();
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, RegistrationActivity.class));
     }
 }

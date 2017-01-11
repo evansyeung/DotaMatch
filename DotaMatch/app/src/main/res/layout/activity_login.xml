@@ -27,6 +27,10 @@
             android:layout_gravity="center_horizontal"
             android:textColor="@color/text" />
 
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="20dp" />
+
         <EditText
             android:layout_margin="15dp"
             android:inputType="textEmailAddress"
@@ -34,7 +38,7 @@
             android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/text" />
+            android:background="@color/text" />
 
         <EditText
             android:layout_margin="15dp"
@@ -43,7 +47,7 @@
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/text" />
+            android:background="@color/text" />
 
         <Button
             android:id="@+id/buttonEnter"
