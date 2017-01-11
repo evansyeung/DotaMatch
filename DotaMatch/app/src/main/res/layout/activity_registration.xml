@@ -52,8 +52,9 @@
         <Button
             android:id="@+id/buttonRegister"
             android:text="Register User"
-            android:layout_width="match_parent"
+            android:layout_width="210dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:textColor="@color/text"
             android:backgroundTint="@color/colorPrimary" />
 

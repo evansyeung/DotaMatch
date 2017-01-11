@@ -83,25 +83,26 @@
 
             <Spinner
                 android:id="@+id/roleSpinner"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="25dp"
                 android:layout_alignParentRight="true"
                 android:layout_toRightOf="@+id/textViewRole"
-                android:backgroundTint="@color/text"
-                android:popupBackground="@color/text"
+                android:backgroundTint="@color/colorPrimary"
+                android:textAlignment="center"
                 ></Spinner>
 
         </LinearLayout>
 
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="20dp" />
+            android:layout_height="220dp" />
 
         <Button
             android:id="@+id/buttonSubmit"
             android:text="Submit"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:textColor="@color/text"
             android:backgroundTint="@color/colorPrimary" />
     </LinearLayout>

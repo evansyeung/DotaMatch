@@ -41,6 +41,10 @@
                     android:textAlignment="viewStart" />
             </LinearLayout>
 
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="10dp" />
+
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -93,6 +97,10 @@
                     android:layout_weight="2" />
             </LinearLayout>
 
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="10dp" />
+
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -143,6 +151,10 @@
                     android:layout_alignParentStart="true"
                     android:layout_weight="2" />
             </LinearLayout>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="10dp" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -195,6 +207,10 @@
                     android:layout_weight="2" />
             </LinearLayout>
 
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="10dp" />
+
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -245,6 +261,10 @@
                     android:layout_alignParentStart="true"
                     android:layout_weight="2" />
             </LinearLayout>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="10dp" />
 
             <LinearLayout
                 android:orientation="horizontal"

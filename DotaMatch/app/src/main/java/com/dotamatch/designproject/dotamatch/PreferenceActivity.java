@@ -40,7 +40,6 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
 
     private RatingBar ratingBarRating;
 
-    private Button buttonSave;
     private Button buttonUpdate;
 
     private String role;
@@ -66,12 +65,10 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
 
         ratingBarRating = (RatingBar) findViewById(R.id.ratingBarRating);
 
-        buttonSave = (Button) findViewById(R.id.buttonSave);
         buttonUpdate = (Button) findViewById(R.id.buttonUpdate);
 
         ratingBarRating.setOnClickListener(this);
 
-        buttonSave.setOnClickListener(this);
         buttonUpdate.setOnClickListener(this);
 
         //Role dropdown menu setup
