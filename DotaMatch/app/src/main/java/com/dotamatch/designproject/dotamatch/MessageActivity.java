@@ -1,9 +1,12 @@
 package com.dotamatch.designproject.dotamatch;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -32,6 +35,8 @@ public class MessageActivity extends AppCompatActivity {
     private String room_name;
     //private String user_name;
     private String temp_key;
+    private String chat_msg;
+    private String chat_user_name;
 
     private DatabaseReference databaseReference;
     private DatabaseReference databaseUserReference;
@@ -62,6 +67,9 @@ public class MessageActivity extends AppCompatActivity {
 
         setTitle(room_name);
 
+        //Disable automatic popup keyboard on activity start
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         databaseUserReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -75,6 +83,7 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
+        View view = this.getCurrentFocus();
 
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +99,12 @@ public class MessageActivity extends AppCompatActivity {
                 map2.put("msg",editTextMessageInput.getText().toString());
 
                 message_root.updateChildren(map2);
+
+                //Hides keyboard after clicking ADD ROOM button
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
             }
         });
 
@@ -120,9 +135,6 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
     }
-
-    private String chat_msg;
-    private String chat_user_name;
 
     private void append_chat_conversation(DataSnapshot dataSnapShot) {
 

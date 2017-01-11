@@ -1,9 +1,12 @@
 package com.dotamatch.designproject.dotamatch;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -51,12 +54,23 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         listViewRoomList.setAdapter(arrayAdapter);
 
+        //Disable automatic popup keyboard on activity start
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+        View view = this.getCurrentFocus();
+
         buttonAddRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Map<String,Object> map = new HashMap<String, Object>();
                 map.put(editTextRoomName.getText().toString(),"");
                 databaseReference.updateChildren(map);
+
+                //Hides keyboard after clicking ADD ROOM button
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
             }
         });
 

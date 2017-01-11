@@ -104,22 +104,7 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
             }
         });
     }
-/*
-    private void saveUserInformation() {
-        String DotaName = editTextDotaName.getText().toString().trim();
-        String mmrTemp = editTextMMR.getText().toString().trim();
-        int mmr = Integer.valueOf(mmrTemp);
-        float rating = ratingBarRating.getRating();
 
-        User userInformation = new User(DotaName, mmr, role, rating);
-
-        //Store user information into Firebase Database
-        //Get unique id of login of current user
-        databaseReference.child(currentUser.getUid()).setValue(userInformation);
-
-        Toast.makeText(this, "Information Save...", Toast.LENGTH_LONG).show();
-    }
-*/
     void updateDotaName(String DotaName) {
         if(DotaName.length() <= 15) {   //Check if name is within range
             if(!error) {
@@ -156,7 +141,6 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
     private void updateUserInformation() {
         String DotaName = editTextDotaName.getText().toString().trim();
         String mmrTemp = editTextMMR.getText().toString().trim();
-        //float rating = ratingBarRating.getRating();
 
         boolean bool_DotaName = TextUtils.isEmpty(DotaName);
         boolean bool_mmrTemp = TextUtils.isEmpty(mmrTemp);

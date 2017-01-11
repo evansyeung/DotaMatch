@@ -10,6 +10,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:textColor="@color/text"
         android:backgroundTint="@color/colorPrimary"/>
 
     <EditText

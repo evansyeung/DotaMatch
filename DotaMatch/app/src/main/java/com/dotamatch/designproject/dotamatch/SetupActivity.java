@@ -92,12 +92,18 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
             Toast.makeText(this, "Please enter your Dota Name", Toast.LENGTH_SHORT).show();
             //Stop function exectuion
             return;
+        }else if(DotaName.length() > 15) {
+            Toast.makeText(this, "Invalid name, please re-enter", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         if(TextUtils.isEmpty(mmrTemp)) {
             //password is empty
             Toast.makeText(this, "Please enter your MMR", Toast.LENGTH_SHORT).show();
             //Stop function exectuion
+            return;
+        }else if(Integer.valueOf(mmrTemp) < 0 || Integer.valueOf(mmrTemp) > 8000) {
+            Toast.makeText(this, "Invalid MMR, please re-enter MMR", Toast.LENGTH_SHORT).show();
             return;
         }
 

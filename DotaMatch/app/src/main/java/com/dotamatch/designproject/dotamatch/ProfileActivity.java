@@ -9,12 +9,21 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener{
 
+    private DatabaseReference databaseReference;
+
     private FirebaseAuth firebaseAuth;
 
-    private TextView textViewUserEmail;
+    private FirebaseUser firebaseUser;
+
+    private TextView textViewUserName;
 
     private Button buttonPlay;
     private Button buttonMessage;
@@ -33,11 +42,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             startActivity(new Intent(this, LoginActivity.class));
         }
 
-        FirebaseUser user = firebaseAuth.getCurrentUser();
+        databaseReference = FirebaseDatabase.getInstance().getReference("User");
 
-        textViewUserEmail = (TextView) findViewById(R.id.textViewUserEmail);
+        firebaseUser = firebaseAuth.getCurrentUser();
 
-        textViewUserEmail.setText("Welcome " + user.getEmail());
+        textViewUserName = (TextView) findViewById(R.id.textViewUserName);
 
         buttonPlay = (Button) findViewById(R.id.buttonPlay);
         buttonMessage = (Button) findViewById(R.id.buttonMessage);
@@ -48,6 +57,19 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         buttonMessage.setOnClickListener(this);
         buttonPreference.setOnClickListener(this);
         buttonLogOut.setOnClickListener(this);
+
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.child(firebaseUser.getUid()).getValue(User.class);
+                textViewUserName.setText("Welcome, " + user.DotaName + "!");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
