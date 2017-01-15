@@ -4,9 +4,10 @@
     <string-array name="role_names">
         <item></item>
         <item>Fill</item>
-        <item>Mid</item>
         <item>Carry</item>
-        <item>Support</item>
+        <item>Solo</item>
+        <item>Offlaner</item>
         <item>Jungler</item>
+        <item>Support</item>
     </string-array>
 </resources>

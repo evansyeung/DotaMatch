@@ -21,14 +21,20 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
-public class PartyActivity extends AppCompatActivity implements View.OnClickListener{
+public class PartyActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private Party party = new Party();
 
     private Button buttonStart;
     private Button buttonSearch;
     private Button buttonSaveRating;
 
+    //Use in matchmaking to determine if a player's rating is >= selected rating
     private NumberPicker numberPickerRating;
+    //Used to search for desired number of players
+    private NumberPicker numberPickerPlayer;
 
     private TextView textViewUser1;
     private TextView textViewUser2;
@@ -48,19 +54,19 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
     private RatingBar ratingBarUser4;
     private RatingBar ratingBarUser5;
 
-    private String uid1;
-    private String uid2;
-    private String uid3;
-    private String uid4;
-    private String uid5;
+    Random rand = new Random();
+
+    //Counter for numberPickerPlayer max
+    private int remaining = 4;
 
     private ProgressDialog progressDialog;
 
-    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();;
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    ;
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
-    private FirebaseUser temp = firebaseAuth.getCurrentUser();
+    private FirebaseUser fbUser = firebaseAuth.getCurrentUser();
 
     private DatabaseReference databaseReferencePartyLeader = firebaseDatabase.getReference("/User");
     private DatabaseReference databaseReferenceMembers = firebaseDatabase.getReference("/User");
@@ -78,6 +84,11 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
         numberPickerRating.setMaxValue(5);
         numberPickerRating.setMinValue(1);
         numberPickerRating.setWrapSelectorWheel(false);
+
+        numberPickerPlayer = (NumberPicker) findViewById(R.id.numberPickerPlayer);
+        numberPickerPlayer.setMaxValue(4);
+        numberPickerPlayer.setMinValue(1);
+        numberPickerPlayer.setWrapSelectorWheel(false);
 
         textViewUser1 = (TextView) findViewById(R.id.textViewUser1);
         textViewUser2 = (TextView) findViewById(R.id.textViewUser2);
@@ -104,10 +115,15 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
         databaseReferencePartyLeader.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.child(temp.getUid()).getValue(User.class);
-                textViewUser1.setText(user.DotaName);
-                textViewUser1Role.setText(user.role);
-                ratingBarUser1.setRating(user.rating);
+                User user = dataSnapshot.child(fbUser.getUid()).getValue(User.class);
+                party.leader = user;
+                textViewUser1.setText(party.leader.DotaName);
+                textViewUser1Role.setText(party.leader.role);
+                ratingBarUser1.setRating(party.leader.rating);
+                party.leader_Key = dataSnapshot.child(fbUser.getUid()).getKey();
+                setPartyRole(user);
+
+                //System.out.println("UID: " +  dataSnapshot.child(fbUser.getUid()).getKey());
             }
 
             @Override
@@ -121,6 +137,165 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
         buttonSaveRating.setOnClickListener(this);
     }
 
+    //Sets party's role based on user's role
+    void setPartyRole(User user) {
+        if (user.role.equals("Solo")) {
+            party.solo = true;
+            party.numberOfMembers += 1;
+        } else if (user.role.equals("Carry")) {
+            party.carry = true;
+            party.numberOfMembers += 1;
+        } else if (user.role.equals("Offlaner")) {
+            party.offlaner = true;
+            party.numberOfMembers += 1;
+        } else if (user.role.equals("Jungler")) {
+            party.jungler = true;
+            party.numberOfMembers += 1;
+        } else if (user.role.equals("Support")) {
+            party.support = true;
+            party.numberOfMembers += 1;
+        } else if (user.role.equals("Fill")) {
+            if (!party.solo)
+                party.solo = true;
+            else if (!party.carry)
+                party.carry = true;
+            else if (!party.offlaner)
+                party.offlaner = true;
+            else if (!party.jungler)
+                party.jungler = true;
+            else if (!party.support)
+                party.support = true;
+
+            party.numberOfMembers += 1;
+        }
+    }
+
+    String checkOpenRoles() {
+        //Randomize role priority, does not cover all possible combinations
+        //Combinations were randomly chosen
+        int n = rand.nextInt(5) + 1;
+
+        if (n == 1) {
+            if (!party.carry)
+                return "Carry";
+            else if (!party.solo)
+                return "Solo";
+            else if (!party.offlaner)
+                return "Offlaner";
+            else if (!party.jungler)
+                return "Jungler";
+            else
+                return "Support";
+        } else if (n == 2) {
+            if (!party.jungler)
+                return "Jungler";
+            else if (!party.offlaner)
+                return "Offlaner";
+            else if (!party.solo)
+                return "Solo";
+            else if (!party.support)
+                return "Support";
+            else
+                return "Carry";
+        } else if (n == 3) {
+            if (!party.support)
+                return "Support";
+            else if (!party.offlaner)
+                return "Offlaner";
+            else if (!party.carry)
+                return "Carry";
+            else if (!party.jungler)
+                return "Jungler";
+            else
+                return "Solo";
+        } else if (n == 4) {
+            if (!party.offlaner)
+                return "Offlaner";
+            else if (!party.solo)
+                return "Solo";
+            else if (!party.carry)
+                return "Carry";
+            else if (!party.support)
+                return "Support";
+            else
+                return "Jungler";
+        } else if (n == 5) {
+            if (!party.solo)
+                return "Solo";
+            else if (!party.support)
+                return "Support";
+            else if (!party.offlaner)
+                return "Offlaner";
+            else if (!party.carry)
+                return "Carry";
+            else
+                return "Offlaner";
+        }
+        return "";
+    }
+
+    //Searches for members based on roles available
+    void searchForMembers(Iterator<DataSnapshot> iter, String role) {
+        User userTemp;
+        while(iter.hasNext()) {
+            DataSnapshot child = iter.next();
+
+            if(party.numberOfMembers == 1) {    //Search for 2nd member
+                if(!child.getKey().equals(party.leader_Key)) {
+                    userTemp = child.getValue(User.class);
+                    if ((userTemp.role.equals(role) || userTemp.role.equals("Fill")) && userTemp.rating >= numberPickerRating.getValue()) {
+                         party.user2 = userTemp;
+                        textViewUser2.setText(party.user2.DotaName);
+                        textViewUser2Role.setText(party.user2.role);
+                        ratingBarUser2.setRating(party.user2.rating);
+                        party.user2_Key = child.getKey();
+                        setPartyRole(userTemp);
+                        return;
+                    }
+                }
+            }else if(party.numberOfMembers == 2) {  //Search for 3rd member
+                if(!child.getKey().equals(party.leader_Key) && !child.getKey().equals(party.user2_Key)) {
+                    userTemp = child.getValue(User.class);
+                    if ((userTemp.role.equals(role) || userTemp.role.equals("Fill")) && userTemp.rating >= numberPickerRating.getValue()) {;
+                        party.user3 = userTemp;
+                        textViewUser3.setText(party.user3.DotaName);
+                        textViewUser3Role.setText(party.user3.role);
+                        ratingBarUser3.setRating(party.user3.rating);
+                        party.user3_Key = child.getKey();
+                        setPartyRole(userTemp);
+                        return;
+                    }
+                }
+            }else if(party.numberOfMembers == 3) {  //Search for 4th member
+                if(!child.getKey().equals(party.leader_Key) && !child.getKey().equals(party.user2_Key) && !child.getKey().equals(party.user3_Key)) {
+                    userTemp = child.getValue(User.class);
+                    if ((userTemp.role.equals(role) || userTemp.role.equals("Fill")) && userTemp.rating >= numberPickerRating.getValue()) {
+                        party.user4 = userTemp;
+                        textViewUser4.setText(party.user4.DotaName);
+                        textViewUser4Role.setText(party.user4.role);
+                        ratingBarUser4.setRating(party.user4.rating);
+                        party.user4_Key = child.getKey();
+                        setPartyRole(userTemp);
+                        return;
+                    }
+                }
+            }else if(party.numberOfMembers == 4) {  //Search for 5th member
+                if(!child.getKey().equals(party.leader_Key) && !child.getKey().equals(party.user2_Key) && !child.getKey().equals(party.user3_Key) && !child.getKey().equals(party.user4_Key)) {
+                    userTemp = child.getValue(User.class);
+                    if ((userTemp.role.equals(role) || userTemp.role.equals("Fill")) && userTemp.rating >= numberPickerRating.getValue()) {
+                        party.user5 = userTemp;
+                        textViewUser5.setText(party.user5.DotaName);
+                        textViewUser5Role.setText(party.user5.role);
+                        ratingBarUser5.setRating(party.user5.rating);
+                        party.user5_Key = child.getKey();
+                        setPartyRole(userTemp);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void onClick(View view) {
         if(view == buttonStart) {
@@ -129,63 +304,60 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
         }
 
         if(view == buttonSearch) {
-            Toast.makeText(this, "Searching for members...", Toast.LENGTH_LONG).show();
+            if(party.numberOfMembers < 5 ) {
+                Toast.makeText(this, "Searching for members...", Toast.LENGTH_LONG).show();
 
-            databaseReferenceMembers.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                databaseReferenceMembers.addListenerForSingleValueEvent(new ValueEventListener() {
+                    //Used to get the numberPickerPlayer value before maxValue is changed on numberPickerPlayer
+                    int numberTemp = numberPickerPlayer.getValue();
 
-                    //Create & fill arraylist to hold all children
-                    ArrayList<DataSnapshot> children = new ArrayList<DataSnapshot>();
-                    for(DataSnapshot child : dataSnapshot.getChildren()) {
-                        children.add(child);
-                    }
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        ArrayList<DataSnapshot> children = new ArrayList<DataSnapshot>();
+                        for(DataSnapshot child : dataSnapshot.getChildren()) {
+                            children.add(child);
+                        }
 
-                    uid1 = temp.getUid();
-
-                    Iterator<DataSnapshot> i = children.iterator();
-
-                    while (i.hasNext()) {
-                        DataSnapshot child = i.next();
-                        if (child.getKey() != uid1) {
-                            User user = child.getValue(User.class);
-                            if (user.rating >= numberPickerRating.getValue()) {
-                                textViewUser2.setText(user.DotaName);
-                                textViewUser2Role.setText(user.role);
-                                ratingBarUser2.setRating(user.rating);
-                                uid2 = child.getKey();
-                            }
+                        Iterator<DataSnapshot> iter = children.iterator();
+                        System.out.println("#: " + numberPickerPlayer.getValue());
+                        for(int j = 0; j < numberTemp; j++) {
+                            searchForMembers(iter, checkOpenRoles());
                         }
                     }
 
-                    Iterator<DataSnapshot> j = children.iterator();
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-                    while (j.hasNext()) {
-                        DataSnapshot child = j.next();
-                        User user1 = child.getValue(User.class);
-                        if (child.getKey() != uid1 && child.getKey() != uid2 && user1.rating >= numberPickerRating.getValue()) {
-                            textViewUser3.setText(user1.DotaName);
-                            textViewUser3Role.setText(user1.role);
-                            ratingBarUser3.setRating(user1.rating);
-                            uid3 = child.getKey();
-                        }
                     }
-                }
+                });
+            }
+            else if(party.numberOfMembers >= 5)
+                Toast.makeText(this, "Party is full", Toast.LENGTH_LONG).show();
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    System.out.println("The read failed: " + databaseError.getCode());
-                }
-            });
+            //Updates numberPickerPlayer to display remaining party slots left
+            remaining -= numberPickerPlayer.getValue();
+            numberPickerPlayer.setMaxValue(remaining);
+            numberPickerPlayer.setMinValue(1);
         }
 
         if(view == buttonSaveRating) {
             Toast.makeText(this, "Saving ratings...", Toast.LENGTH_SHORT).show();
+
+/*
+            System.out.println("# of members: " + party.numberOfMembers);
+            System.out.println("Carry: " + party.carry);
+            System.out.println("Solo: " + party.solo);
+            System.out.println("Offlaner: " + party.offlaner);
+            System.out.println("Jungler: " + party.jungler);
+            System.out.println("Support: " + party.support);
+            */
+
         }
 }
 
     @Override
     public void onBackPressed() {
+        //Make an alert dialog box
         finish();
         startActivity(new Intent(this, ProfileActivity.class));
     }
