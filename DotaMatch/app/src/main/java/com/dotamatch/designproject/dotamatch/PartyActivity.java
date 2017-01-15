@@ -1,8 +1,10 @@
 package com.dotamatch.designproject.dotamatch;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -357,8 +359,31 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onBackPressed() {
-        //Make an alert dialog box
-        finish();
-        startActivity(new Intent(this, ProfileActivity.class));
+        if (party.numberOfMembers > 1) {
+            //Displays alert dialog box to confirm the user wants to leave the party
+            AlertDialog.Builder leaveAlert = new AlertDialog.Builder(this);
+            leaveAlert.setMessage("Are you sure you want to leave the party?")
+                    .setPositiveButton("Leave", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            finish();
+                            startActivity(new Intent(PartyActivity.this, ProfileActivity.class));
+                        }
+                    })
+                    .setNegativeButton("Stay", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //Do nothing stay in party activity
+                            dialog.dismiss();
+                        }
+                    })
+                    .create();
+            leaveAlert.show();
+        }
+        else {
+            finish();
+            startActivity(new Intent(this, ProfileActivity.class));
+        }
     }
 }
