@@ -120,7 +120,7 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
         //Get unique id of login of current user
         databaseReference.child(currentUser.getUid()).setValue(userInformation);
 
-        Toast.makeText(this, "Saving Information...", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Saving Information", Toast.LENGTH_LONG).show();
 
         everythingFilled = true;
     }

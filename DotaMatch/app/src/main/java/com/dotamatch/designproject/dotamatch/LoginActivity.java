@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         //if validations are ok show progress bar
-        progressDialog.setMessage("Logging in...");
+        progressDialog.setMessage("Logging in");
         progressDialog.show();
 
         firebaseAuth.signInWithEmailAndPassword(email, password)

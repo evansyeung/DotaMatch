@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class PartyActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -50,21 +52,26 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
     private TextView textViewUser4Role;
     private TextView textViewUser5Role;
 
+    private TextView textViewTimer;
+
     private RatingBar ratingBarUser1;
     private RatingBar ratingBarUser2;
     private RatingBar ratingBarUser3;
     private RatingBar ratingBarUser4;
     private RatingBar ratingBarUser5;
 
-    Random rand = new Random();
+    //RNG used to decide role priority
+    private Random rand = new Random();
 
-    //Counter for numberPickerPlayer max
+    private boolean inGame = false;
+    private boolean gameEnd = false;
+
+    //Counter for numberPickerPlayer max value
     private int remaining = 4;
 
     private ProgressDialog progressDialog;
 
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    ;
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
@@ -104,6 +111,8 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
         textViewUser4Role = (TextView) findViewById(R.id.textViewUser4Role);
         textViewUser5Role = (TextView) findViewById(R.id.textViewUser5Role);
 
+        textViewTimer = (TextView) findViewById(R.id.textViewTimer);
+
         ratingBarUser1 = (RatingBar) findViewById(R.id.ratingBarUser1);
         ratingBarUser2 = (RatingBar) findViewById(R.id.ratingBarUser2);
         ratingBarUser3 = (RatingBar) findViewById(R.id.ratingBarUser3);
@@ -124,8 +133,6 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
                 ratingBarUser1.setRating(party.leader.rating);
                 party.leader_Key = dataSnapshot.child(fbUser.getUid()).getKey();
                 setPartyRole(user);
-
-                //System.out.println("UID: " +  dataSnapshot.child(fbUser.getUid()).getKey());
             }
 
             @Override
@@ -141,34 +148,42 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
 
     //Sets party's role based on user's role
     void setPartyRole(User user) {
-        if (user.role.equals("Solo")) {
-            party.solo = true;
-            party.numberOfMembers += 1;
-        } else if (user.role.equals("Carry")) {
-            party.carry = true;
-            party.numberOfMembers += 1;
-        } else if (user.role.equals("Offlaner")) {
-            party.offlaner = true;
-            party.numberOfMembers += 1;
-        } else if (user.role.equals("Jungler")) {
-            party.jungler = true;
-            party.numberOfMembers += 1;
-        } else if (user.role.equals("Support")) {
-            party.support = true;
-            party.numberOfMembers += 1;
-        } else if (user.role.equals("Fill")) {
-            if (!party.solo)
-                party.solo = true;
-            else if (!party.carry)
-                party.carry = true;
-            else if (!party.offlaner)
-                party.offlaner = true;
-            else if (!party.jungler)
-                party.jungler = true;
-            else if (!party.support)
-                party.support = true;
 
-            party.numberOfMembers += 1;
+        switch(user.role) {
+            case "Solo":
+                party.solo = true;
+                party.numberOfMembers += 1;
+                break;
+            case "Carry":
+                party.carry = true;
+                party.numberOfMembers += 1;
+                break;
+            case "Offlaner":
+                party.offlaner = true;
+                party.numberOfMembers += 1;
+                break;
+            case "Jungler":
+                party.jungler = true;
+                party.numberOfMembers += 1;
+                break;
+            case "Support":
+                party.support = true;
+                party.numberOfMembers += 1;
+                break;
+            case "Fill":
+                if (!party.solo)
+                    party.solo = true;
+                else if (!party.carry)
+                    party.carry = true;
+                else if (!party.offlaner)
+                    party.offlaner = true;
+                else if (!party.jungler)
+                    party.jungler = true;
+                else if (!party.support)
+                    party.support = true;
+
+                party.numberOfMembers += 1;
+                break;
         }
     }
 
@@ -177,61 +192,72 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
         //Combinations were randomly chosen
         int n = rand.nextInt(5) + 1;
 
-        if (n == 1) {
-            if (!party.carry)
-                return "Carry";
-            else if (!party.solo)
-                return "Solo";
-            else if (!party.offlaner)
-                return "Offlaner";
-            else if (!party.jungler)
-                return "Jungler";
-            else
-                return "Support";
-        } else if (n == 2) {
-            if (!party.jungler)
-                return "Jungler";
-            else if (!party.offlaner)
-                return "Offlaner";
-            else if (!party.solo)
-                return "Solo";
-            else if (!party.support)
-                return "Support";
-            else
-                return "Carry";
-        } else if (n == 3) {
-            if (!party.support)
-                return "Support";
-            else if (!party.offlaner)
-                return "Offlaner";
-            else if (!party.carry)
-                return "Carry";
-            else if (!party.jungler)
-                return "Jungler";
-            else
-                return "Solo";
-        } else if (n == 4) {
-            if (!party.offlaner)
-                return "Offlaner";
-            else if (!party.solo)
-                return "Solo";
-            else if (!party.carry)
-                return "Carry";
-            else if (!party.support)
-                return "Support";
-            else
-                return "Jungler";
-        } else if (n == 5) {
-            if (!party.solo)
-                return "Solo";
-            else if (!party.support)
-                return "Support";
-            else if (!party.offlaner)
-                return "Offlaner";
-            else if (!party.carry)
-                return "Carry";
-            else
-                return "Offlaner";
+        switch(n) {
+            case 1:
+                if (!party.carry)
+                    return "Carry";
+                else if (!party.solo)
+                    return "Solo";
+                else if (!party.offlaner)
+                    return "Offlaner";
+                else if (!party.jungler)
+                    return "Jungler";
+                else if(!party.support)
+                    return "Support";
+                else
+                    break;
+            case 2:
+                if (!party.jungler)
+                    return "Jungler";
+                else if (!party.offlaner)
+                    return "Offlaner";
+                else if (!party.solo)
+                    return "Solo";
+                else if (!party.support)
+                    return "Support";
+                else if(!party.carry)
+                    return "Carry";
+                else
+                    break;
+            case 3:
+                if (!party.support)
+                    return "Support";
+                else if (!party.offlaner)
+                    return "Offlaner";
+                else if (!party.carry)
+                    return "Carry";
+                else if (!party.jungler)
+                    return "Jungler";
+                else if(!party.solo)
+                    return "Solo";
+                else
+                    break;
+            case 4:
+                if (!party.offlaner)
+                    return "Offlaner";
+                else if (!party.solo)
+                    return "Solo";
+                else if (!party.carry)
+                    return "Carry";
+                else if (!party.support)
+                    return "Support";
+                else if(!party.jungler)
+                    return "Jungler";
+                else
+                    break;
+            case 5:
+                if (!party.solo)
+                    return "Solo";
+                else if (!party.support)
+                    return "Support";
+                else if (!party.jungler)
+                    return "Jungler";
+                else if (!party.carry)
+                    return "Carry";
+                else if(!party.offlaner)
+                    return "Offlaner";
+                else
+                    break;
         }
         return "";
     }
@@ -301,13 +327,40 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         if(view == buttonStart) {
-            progressDialog.setMessage("Game in progress...");
+            inGame = true;
+            progressDialog.setMessage("Game in progress");
             progressDialog.show();
+
+            new CountDownTimer(60000, 1000) {   //60000 milliseconds = 1min, set to 1min for testing purposes
+
+                public void onTick(long millisUntilFinished) {
+                    textViewTimer.setText(""+String.format("%d : %d",
+                            TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
+                            TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+                }
+
+                public void onFinish() {
+                    inGame = false;
+                    gameEnd = true;
+                    progressDialog.dismiss();
+
+                    if(party.numberOfMembers != 1)
+                        textViewTimer.setText("Rate members!");
+                    else
+                        textViewTimer.setText("Game End");
+
+                    //Allow users to rate each other after game has ended
+                    ratingBarUser2.setIsIndicator(false);
+                    ratingBarUser3.setIsIndicator(false);
+                    ratingBarUser4.setIsIndicator(false);
+                    ratingBarUser5.setIsIndicator(false);
+                }
+            }.start();
         }
 
         if(view == buttonSearch) {
-            if(party.numberOfMembers < 5 ) {
-                Toast.makeText(this, "Searching for members...", Toast.LENGTH_LONG).show();
+            if(party.numberOfMembers < 5 && !inGame) {
+                Toast.makeText(this, "Searching for members", Toast.LENGTH_LONG).show();
 
                 databaseReferenceMembers.addListenerForSingleValueEvent(new ValueEventListener() {
                     //Used to get the numberPickerPlayer value before maxValue is changed on numberPickerPlayer
@@ -321,7 +374,6 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
                         }
 
                         Iterator<DataSnapshot> iter = children.iterator();
-                        System.out.println("#: " + numberPickerPlayer.getValue());
                         for(int j = 0; j < numberTemp; j++) {
                             searchForMembers(iter, checkOpenRoles());
                         }
@@ -343,17 +395,12 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
         }
 
         if(view == buttonSaveRating) {
-            Toast.makeText(this, "Saving ratings...", Toast.LENGTH_SHORT).show();
-
-/*
-            System.out.println("# of members: " + party.numberOfMembers);
-            System.out.println("Carry: " + party.carry);
-            System.out.println("Solo: " + party.solo);
-            System.out.println("Offlaner: " + party.offlaner);
-            System.out.println("Jungler: " + party.jungler);
-            System.out.println("Support: " + party.support);
-            */
-
+            if(!inGame && gameEnd)
+                Toast.makeText(this, "Saving ratings", Toast.LENGTH_SHORT).show();
+            else if(party.numberOfMembers == 1)
+                Toast.makeText(this, "No party members to rate!", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(this, "Game has not ended", Toast.LENGTH_SHORT).show();
         }
 }
 

@@ -177,7 +177,7 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
 
        //Update message if changes were made
        if(changesMade) {
-           Toast.makeText(this, "Updating...", Toast.LENGTH_SHORT).show();
+           Toast.makeText(this, "Updating", Toast.LENGTH_SHORT).show();
        }
     }
 

@@ -77,7 +77,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         }
 
         //if validations are ok show progress bar
-        progressDialog.setMessage("Registering User...");
+        progressDialog.setMessage("Registering User");
         progressDialog.show();
 
         //User FirebaseAuth to register user on Firebase console
