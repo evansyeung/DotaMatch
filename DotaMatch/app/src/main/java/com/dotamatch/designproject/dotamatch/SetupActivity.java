@@ -17,6 +17,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 public class SetupActivity extends AppCompatActivity implements View.OnClickListener{
 
     private EditText editTextDotaName;
@@ -114,7 +116,10 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
             return;
         }
 
-        User userInformation = new User(DotaName, Integer.valueOf(mmrTemp), role, 5);
+        ArrayList<Float> tempArrayList = new ArrayList<Float>();
+        tempArrayList.add(5.0f);
+
+        User userInformation = new User(DotaName, Integer.valueOf(mmrTemp), role, tempArrayList);
 
         //Store user information into Firebase Database
         //Get unique id of login of current user

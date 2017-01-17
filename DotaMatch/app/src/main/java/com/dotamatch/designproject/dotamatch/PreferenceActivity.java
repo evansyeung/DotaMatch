@@ -67,8 +67,6 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
 
         buttonUpdate = (Button) findViewById(R.id.buttonUpdate);
 
-        ratingBarRating.setOnClickListener(this);
-
         buttonUpdate.setOnClickListener(this);
 
         //Role dropdown menu setup
@@ -95,7 +93,7 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.child(currentUser.getUid()).getValue(User.class);
-                ratingBarRating.setRating(user.rating);
+                ratingBarRating.setRating(user.getRatingAverage());
             }
 
             @Override
