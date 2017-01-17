@@ -11,6 +11,7 @@ public class User {
     public String DotaName;
     public int MMR;
     public String role;
+    public float ratingAverage;     //Unused varible since Firebase automatically creates ratingAverage when adding User to database
     public ArrayList<Float> ratings = new ArrayList<Float>();
 
     public User() {

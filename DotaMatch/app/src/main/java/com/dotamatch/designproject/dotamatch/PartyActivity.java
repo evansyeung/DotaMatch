@@ -174,19 +174,32 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
                 party.numberOfMembers += 1;
                 break;
             case "Fill":
-                if (!party.solo)
-                    party.solo = true;
-                else if (!party.carry)
-                    party.carry = true;
-                else if (!party.offlaner)
-                    party.offlaner = true;
-                else if (!party.jungler)
-                    party.jungler = true;
-                else if (!party.support)
-                    party.support = true;
 
-                party.numberOfMembers += 1;
-                break;
+                if (!party.solo) {
+                    party.solo = true;
+                    party.numberOfMembers += 1;
+                    break;
+                }
+                else if (!party.carry) {
+                    party.carry = true;
+                    party.numberOfMembers += 1;
+                    break;
+                }
+                else if (!party.offlaner) {
+                    party.offlaner = true;
+                    party.numberOfMembers += 1;
+                    break;
+                }
+                else if (!party.jungler) {
+                    party.jungler = true;
+                    party.numberOfMembers += 1;
+                    break;
+                }
+                else if (!party.support) {
+                    party.support = true;
+                    party.numberOfMembers += 1;
+                    break;
+                }
         }
     }
 
@@ -271,55 +284,59 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
         while(iter.hasNext()) {
             DataSnapshot child = iter.next();
 
-            if(party.numberOfMembers == 1) {    //Search for 2nd member
+            if(party.user2 == null) {    //Search for 2nd member
                 if(!child.getKey().equals(party.leader_Key)) {
                     userTemp = child.getValue(User.class);
                     if ((userTemp.role.equals(role) || userTemp.role.equals("Fill")) && userTemp.getRatingAverage() >= numberPickerRating.getValue()) {
                         party.user2 = userTemp;
+                        party.user2_Key = child.getKey();
+                        setPartyRole(userTemp);
+
                         textViewUser2.setText(party.user2.DotaName);
                         textViewUser2Role.setText(party.user2.role);
                         ratingBarUser2.setRating(party.user2.getRatingAverage());
-                        party.user2_Key = child.getKey();
-                        setPartyRole(userTemp);
                         return;
                     }
                 }
-            }else if(party.numberOfMembers == 2) {  //Search for 3rd member
+            }else if(party.user3 == null) {  //Search for 3rd member
                 if(!child.getKey().equals(party.leader_Key) && !child.getKey().equals(party.user2_Key)) {
                     userTemp = child.getValue(User.class);
                     if ((userTemp.role.equals(role) || userTemp.role.equals("Fill")) && userTemp.getRatingAverage() >= numberPickerRating.getValue()) {;
                         party.user3 = userTemp;
+                        party.user3_Key = child.getKey();
+                        setPartyRole(userTemp);
+
                         textViewUser3.setText(party.user3.DotaName);
                         textViewUser3Role.setText(party.user3.role);
                         ratingBarUser3.setRating(party.user3.getRatingAverage());
-                        party.user3_Key = child.getKey();
-                        setPartyRole(userTemp);
                         return;
                     }
                 }
-            }else if(party.numberOfMembers == 3) {  //Search for 4th member
+            }else if(party.user4 == null) {  //Search for 4th member
                 if(!child.getKey().equals(party.leader_Key) && !child.getKey().equals(party.user2_Key) && !child.getKey().equals(party.user3_Key)) {
                     userTemp = child.getValue(User.class);
                     if ((userTemp.role.equals(role) || userTemp.role.equals("Fill")) && userTemp.getRatingAverage() >= numberPickerRating.getValue()) {
                         party.user4 = userTemp;
+                        party.user4_Key = child.getKey();
+                        setPartyRole(userTemp);
+
                         textViewUser4.setText(party.user4.DotaName);
                         textViewUser4Role.setText(party.user4.role);
                         ratingBarUser4.setRating(party.user4.getRatingAverage());
-                        party.user4_Key = child.getKey();
-                        setPartyRole(userTemp);
                         return;
                     }
                 }
-            }else if(party.numberOfMembers == 4) {  //Search for 5th member
+            }else if(party.user5 == null) {  //Search for 5th member
                 if(!child.getKey().equals(party.leader_Key) && !child.getKey().equals(party.user2_Key) && !child.getKey().equals(party.user3_Key) && !child.getKey().equals(party.user4_Key)) {
                     userTemp = child.getValue(User.class);
                     if ((userTemp.role.equals(role) || userTemp.role.equals("Fill")) && userTemp.getRatingAverage() >= numberPickerRating.getValue()) {
                         party.user5 = userTemp;
+                        party.user5_Key = child.getKey();
+                        setPartyRole(userTemp);
+
                         textViewUser5.setText(party.user5.DotaName);
                         textViewUser5Role.setText(party.user5.role);
                         ratingBarUser5.setRating(party.user5.getRatingAverage());
-                        party.user5_Key = child.getKey();
-                        setPartyRole(userTemp);
                         return;
                     }
                 }
@@ -361,6 +378,7 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         if(view == buttonStart) {
+            System.out.println("Party #: " + party.numberOfMembers);
             inGame = true;
             progressDialog.setMessage("Game in progress");
             progressDialog.show();
@@ -411,9 +429,9 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
                         for(DataSnapshot child : dataSnapshot.getChildren()) {
                             children.add(child);
                         }
-
                         Iterator<DataSnapshot> iter = children.iterator();
-                        for(int j = 0; j < numberTemp; j++) {
+
+                        for(int i = 0; i < numberTemp; i++) {
                             searchForMembers(iter, checkOpenRoles());
                         }
                     }
