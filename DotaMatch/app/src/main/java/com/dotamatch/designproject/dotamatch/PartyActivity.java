@@ -33,7 +33,7 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
 
     private Button buttonStart;
     private Button buttonSearch;
-    private Button buttonSaveRating;
+    private Button buttonSubmit;
 
     //Use in matchmaking to determine if a player's rating is >= selected rating
     private NumberPicker numberPickerRating;
@@ -65,6 +65,10 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
 
     private boolean inGame = false;
     private boolean gameEnd = false;
+    private boolean user2Rated;
+    private boolean user3Rated;
+    private boolean user4Rated;
+    private boolean user5Rated;
 
     //Counter for numberPickerPlayer max value
     private int remaining = 4;
@@ -77,8 +81,7 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
 
     private FirebaseUser fbUser = firebaseAuth.getCurrentUser();
 
-    private DatabaseReference databaseReferencePartyLeader = firebaseDatabase.getReference("/User");
-    private DatabaseReference databaseReferenceMembers = firebaseDatabase.getReference("/User");
+    private DatabaseReference databaseReference = firebaseDatabase.getReference("/User");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +90,7 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
 
         buttonStart = (Button) findViewById(R.id.buttonStart);
         buttonSearch = (Button) findViewById(R.id.buttonSearch);
-        buttonSaveRating = (Button) findViewById(R.id.buttonSaveRating);
+        buttonSubmit = (Button) findViewById(R.id.buttonSubmit);
 
         numberPickerRating = (NumberPicker) findViewById(R.id.numberPickerRating);
         numberPickerRating.setMaxValue(5);
@@ -123,7 +126,7 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
 
         setTitle("Party Lobby");
 
-        databaseReferencePartyLeader.addValueEventListener(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.child(fbUser.getUid()).getValue(User.class);
@@ -143,7 +146,7 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
 
         buttonStart.setOnClickListener(this);
         buttonSearch.setOnClickListener(this);
-        buttonSaveRating.setOnClickListener(this);
+        buttonSubmit.setOnClickListener(this);
     }
 
     //Sets party's role based on user's role
@@ -324,6 +327,37 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    void updateRating() {
+        if(party.user2 != null && !user2Rated) {
+            party.user2.ratings.add(ratingBarUser2.getRating());
+            databaseReference.child(party.user2_Key).child("ratings").setValue(party.user2.ratings);
+            databaseReference.child(party.user2_Key).child("ratingAverage").setValue(party.user2.getRatingAverage());
+            user2Rated = true;
+            ratingBarUser2.setIsIndicator(true);
+        }
+        if(party.user3 != null && !user3Rated) {
+            party.user3.ratings.add(ratingBarUser3.getRating());
+            databaseReference.child(party.user3_Key).child("ratings").setValue(party.user3.ratings);
+            databaseReference.child(party.user3_Key).child("ratingAverage").setValue(party.user3.getRatingAverage());
+            user3Rated = true;
+            ratingBarUser3.setIsIndicator(true);
+        }
+        if(party.user4 != null && !user4Rated) {
+            party.user4.ratings.add(ratingBarUser4.getRating());
+            databaseReference.child(party.user4_Key).child("ratings").setValue(party.user4.ratings);
+            databaseReference.child(party.user4_Key).child("ratingAverage").setValue(party.user4.getRatingAverage());
+            user4Rated = true;
+            ratingBarUser4.setIsIndicator(true);
+        }
+        if(party.user5 != null && !user5Rated) {
+            party.user5.ratings.add(ratingBarUser5.getRating());
+            databaseReference.child(party.user5_Key).child("ratings").setValue(party.user5.ratings);
+            databaseReference.child(party.user5_Key).child("ratingAverage").setValue(party.user5.getRatingAverage());
+            user5Rated = true;
+            ratingBarUser5.setIsIndicator(true);
+        }
+    }
+
     @Override
     public void onClick(View view) {
         if(view == buttonStart) {
@@ -331,7 +365,7 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
             progressDialog.setMessage("Game in progress");
             progressDialog.show();
 
-            new CountDownTimer(60000, 1000) {   //60000 milliseconds = 1min, set to 1min for testing purposes
+            new CountDownTimer(10000, 1000) {   //60000 milliseconds = 1min, set to 1min for testing purposes
 
                 public void onTick(long millisUntilFinished) {
                     textViewTimer.setText(""+String.format("%d : %d",
@@ -349,6 +383,11 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
                     else
                         textViewTimer.setText("Game End");
 
+                    user2Rated = false;
+                    user3Rated = false;
+                    user4Rated = false;
+                    user5Rated = false;
+
                     //Allow users to rate each other after game has ended
                     ratingBarUser2.setIsIndicator(false);
                     ratingBarUser3.setIsIndicator(false);
@@ -362,7 +401,7 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
             if(party.numberOfMembers < 5 && !inGame) {
                 Toast.makeText(this, "Searching for members", Toast.LENGTH_LONG).show();
 
-                databaseReferenceMembers.addListenerForSingleValueEvent(new ValueEventListener() {
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     //Used to get the numberPickerPlayer value before maxValue is changed on numberPickerPlayer
                     int numberTemp = numberPickerPlayer.getValue();
 
@@ -394,14 +433,15 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
             numberPickerPlayer.setMinValue(1);
         }
 
-        if(view == buttonSaveRating) {
-            if(!inGame && gameEnd) {
+        if(view == buttonSubmit) {
+            if(user2Rated || user3Rated || user4Rated || user5Rated) {
+                Toast.makeText(this, "Ratings already submitted", Toast.LENGTH_SHORT).show();
+            }else if(!inGame && gameEnd) {
                 Toast.makeText(this, "Saving ratings", Toast.LENGTH_SHORT).show();
-
-
-            }
-            else if(party.numberOfMembers == 1)
+                updateRating();
+            }else if(party.numberOfMembers == 1) {
                 Toast.makeText(this, "No party members to rate!", Toast.LENGTH_SHORT).show();
+            }
             else
                 Toast.makeText(this, "Game has not ended", Toast.LENGTH_SHORT).show();
         }
@@ -409,10 +449,10 @@ public class PartyActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onBackPressed() {
-        if (party.numberOfMembers > 1) {
+        if (party.numberOfMembers > 1 || inGame) {
             //Displays alert dialog box to confirm the user wants to leave the party
             AlertDialog.Builder leaveAlert = new AlertDialog.Builder(this);
-            leaveAlert.setMessage("Are you sure you want to leave the party?")
+            leaveAlert.setMessage("Are you sure you want to leave?")
                     .setPositiveButton("Leave", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
