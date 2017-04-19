@@ -6,9 +6,9 @@ Welcome to our repository for CS4513-Software Engineering Spring'16 and CS4523-D
 
 DotaMatch is a matchmaking applicaiton developed for Android devices for the MOBA (multiplayer online battle arena) Dota 2. Our motivation for DotaMatch is to allow users to be matched with players of their choice rather than randomly being placed onto a team by Dota 2's in-game matchmaking system. The overall goal of DotaMatch, is to make the process of matchmaking a more enjoyable experience by introducing other factors besides skill level (ELO) into the matchmaking algorithm.
 
-DotaMatch was developed on Android Studio 2.2.3 and incorporates Google's Firebase SDK. Services implemented in this project includes Firebase Authentication, Realtime Database, and Cloud-Messaging (FCM). 
+DotaMatch was developed on Android Studio 2.2.3 and incorporates Google's Firebase SDK. Services implemented in this project include Firebase Registration & Authentication, Real-time Database, and Cloud-Messaging (FCM). 
 
-This repository contains the source code for our DotaMatch applicaiton. It also contains all documentation that can be referenced through the Documentation folder. 
+This repository contains the source code for our DotaMatch application. It also contains all documentation that can be referenced through the Documentation folder. 
 
 Team Members
 -------------
@@ -32,21 +32,21 @@ Installation
 Instructions
 ------------
 
-####Registrationg & Login Functions
+#### Registration & Authentication
 
 ![Alt text](/README_Images/Registration&LoginFunctions.gif?raw=true)
 
-* Email:  requires a email input
+* Email:  requires an email input
 * Password: requires a minimum of 6 chars
 * Account Setup
- * DotaName:  your Dota 2 in game name
+ * DotaName:  your Dota 2 in-game name
  * MMR: your Dota 2 matchmaking rating (ELO) if you play rank games
  * Role: the role you prefer or play most often in Dota 2
  * Newly created accounts will automatically have a rating of 5
 
-Once registration has been complete, you will have access to all of DotaMatch's functionalities. 
+Once registration has been complete, you will have access to all DotaMatch's functionalities. 
 
-####Party Matchmaking Function
+#### Party Matchmaking
 
 ![Alt text](/README_Images/PartyFunction.gif?raw=true)
 
@@ -60,7 +60,7 @@ Once registration has been complete, you will have access to all of DotaMatch's 
 * Submit Button: save and update existing ratings
 
 
-####Chat/Messaging System
+#### Chat/Messaging System
 
 ![Alt text](/README_Images/ChatFunction.gif?raw=true)
 
