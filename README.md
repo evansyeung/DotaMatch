@@ -4,7 +4,7 @@ Introduction
 ------------
 Welcome to our repository for CS4513-Software Engineering Spring'16 and CS4523-Design Project Fall'16. All team members working on this project can be found in the section below. 
 
-DotaMatch is a matchmaking applicaiton developed for Android devices for the MOBA (multiplayer online battle arena) Dota 2. Our motivation for DotaMatch is to allow users to be matched with players of their choice rather than randomly being placed onto a team by Dota 2's in-game matchmaking system. The overall goal of DotaMatch, is to make the process of matchmaking a more enjoyable experience by introducing other factors besides skill level (ELO) into the matchmaking algorithm.
+DotaMatch is a matchmaking application developed for Android devices for the MOBA (multiplayer online battle arena) Dota 2. Our motivation for DotaMatch is to allow users to be matched with players of their choice rather than randomly being placed onto a team by Dota 2's in-game matchmaking system. The overall goal of DotaMatch, is to make the process of matchmaking a more enjoyable experience by introducing other factors besides skill level (ELO) into the matchmaking algorithm.
 
 DotaMatch was developed on Android Studio 2.2.3 and incorporates Google's Firebase SDK. Services implemented in this project include Firebase Registration & Authentication, Real-time Database, and Cloud-Messaging (FCM). 
 
